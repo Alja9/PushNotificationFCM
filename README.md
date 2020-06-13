@@ -14,3 +14,15 @@ In this prototype there are two pages:
 
 1. The first is rooted for user pages
 1. And the second is for admin pages that send messages to users who have allowed notifications (adding ../sendMessaging.html in the link)
+
+## Sample Databse Structure
+```
+/notifications
+  /<uniqueTokenCode>
+    message: "BlaBla"
+    user: "BlaBla"
+    userProfilImg: "BlaBla"
+ /tokens
+  /<uniqueTokenCode>
+    token: "BlaBla"
+```
