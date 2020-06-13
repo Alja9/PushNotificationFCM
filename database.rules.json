@@ -1,7 +1,6 @@
 {
   "rules": {
     "tokens": {
-      ".indexOn": ["token"],
       ".read": true,
       ".write": true
     },
