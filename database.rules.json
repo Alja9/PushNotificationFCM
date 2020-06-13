@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "tokens": {
+      ".indexOn": ["token"],
+      ".read": true,
+      ".write": true
+    },
+    "notifications": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$notification": {
+        ".validate": "newData.hasChildren(['message', 'user', 'userProfilImg'])"
+      }
+    }
+  }
+}
