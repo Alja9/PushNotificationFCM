@@ -27,7 +27,7 @@ exports.sendFNotification = functions.database.ref('/notifications/{notification
     }
     console.info(payload);
 
-    // Clean invalid tokens (di fungsi ini ada kesalahan logic)
+    // Clean invalid tokens
     function cleanInvalidTokens(tokensWithKey, results) {
       const invalidTokens = [];
       results.forEach((result, i) => {
