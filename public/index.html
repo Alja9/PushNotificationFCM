@@ -25,9 +25,6 @@
       </p>
     </header>
 
-    <!-- Button -->
-    <br>
-
   </div>
 
   <!-- Bootstrap -->
@@ -52,53 +49,13 @@
 
   <script>
     // Variable //
-
-    // const firebase_auth = firebase.auth();
     const firebase_messaging = firebase.messaging();
     const firebase_database = firebase.database();
 
-    // const tombolLogin = document.getElementById('login');
-    // const tombolLogout = document.getElementById('logout');
-    // const tombolSubscribe = document.getElementById('subscribe');
-    // const tombolUnsubscribe = document.getElementById('unsubscribe');
-
     // Event Listeners //
-
-    // firebase_auth.onAuthStateChanged(handleAuthStateChanged);
     firebase_messaging.onTokenRefresh(handleTokenRefresh);
 
-    // tombolLogin.addEventListener("click", signIn);
-    // tombolLogout.addEventListener("click", signOut);
-    // tombolSubscribe.addEventListener("click", subscribeToNotifications);
-    // tombolUnsubscribe.addEventListener("click", unsubscribeFromNotifications);
-
     // Functions //
-
-    // function signIn() {
-    //   firebase_auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    // }
-
-    // function signOut() {
-    //   firebase_auth.signOut();
-    //   alert("berhasil logout");
-    // }
-
-    // function handleAuthStateChanged(user) {
-    //   if (user) {
-    //     // User login
-    //     alert(user.email + " login");
-    //     tombolLogin.setAttribute("hidden", "true");
-    //     tombolLogout.removeAttribute("hidden");
-    //     checkSubscription();
-    //   } else {
-    //     // User logout
-    //     tombolLogout.setAttribute("hidden", "true");
-    //     tombolLogin.removeAttribute("hidden");
-    //     tombolSubscribe.setAttribute("hidden", "true");
-    //     tombolUnsubscribe.setAttribute("hidden", "true");
-    //   }
-    // }
-
     window.onload = function subscribeToNotifications() {
       firebase_messaging.requestPermission()
         .then(() => handleTokenRefresh())
