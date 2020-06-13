@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Push Notification | Admin Page</title>
+    <link rel="icon" href="bell.png">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <header>
+            <h1 class="text-center">Admin Page</h1>
+            <p class="text-justify"><i>Dihalaman ini, admin harus login terlebih dahulu, untuk dapat melakukan
+                    pengiriman pesan kepada semua pihak yang subscribe dan allow web ini.
+                    Dibawah ini ada kolom untuk mengisi pengiriman pesannya.<br><b>Keterangan:</b><br>
+                    1. Bila ingin mengetahui pesan berhasil terkirim, silahkan cek pesan tersebut ketika setelah
+                    memencet tombol SEND dan langsung berpindah lah ke halaman lain atau web lain untuk mengecek pop up
+                    pesan itu masuk ke browser anda.<br>
+                    2. Bisa mengirim pesan tanpa memencet subscribe, sebab subscribe hanya diperuntukan untuk penerimaan notifikasi.<br>
+                    3. Dengan kata lain website ini tempat yang dapat mengirimkan pesannya.<br>
+                </i></p>
+        </header>
+
+        <!-- Button -->
+        <button class="btn btn-primary btn-lg btn-block" id="subscribe" hidden>Subscribe</button>
+        <button class="btn btn-primary btn-lg btn-block" id="unsubscribe" hidden>Unsubscribe</button>
+        <button class="btn btn-outline-success btn-lg btn-block" id="login">LOGIN</button>
+        <button class="btn btn-outline-danger btn-lg btn-block" id="logout" hidden>LOGOUT</button>
+
+    </div>
+    <br><br>
+    <div class="container">
+        <form id="sendNotificationForm">
+            <div class="form-group">
+                <label for="notificationMessage">Kirim Pesan</label>
+                <textarea class="form-control" id="notificationMessage" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-lg btn-block btn-primary">SEND</button>
+        </form>
+    </div>
+    <br><br>
+
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+
+    <!-- Import and configure the Firebase SDK -->
+    <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
+    <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+    <script src="/__/firebase/7.14.6/firebase-app.js"></script>
+    <script src="/__/firebase/7.14.6/firebase-auth.js"></script>
+    <script src="/__/firebase/7.14.6/firebase-messaging.js"></script>
+    <script src="/__/firebase/7.14.6/firebase-database.js"></script>
+    <script src="/__/firebase/init.js"></script>
+
+    <script>
+        // Variable //
+
+        const firebase_auth = firebase.auth();
+        const firebase_messaging = firebase.messaging();
+        const firebase_database = firebase.database();
+
+        const tombolLogin = document.getElementById('login');
+        const tombolLogout = document.getElementById('logout');
+        const tombolSubscribe = document.getElementById('subscribe');
+        const tombolUnsubscribe = document.getElementById('unsubscribe');
+        const sendNotificationForm = document.getElementById('sendNotificationForm');
+
+        // Event Listeners //
+
+        firebase_auth.onAuthStateChanged(handleAuthStateChanged);
+        firebase_messaging.onTokenRefresh(handleTokenRefresh);
+
+        tombolLogin.addEventListener("click", signIn);
+        tombolLogout.addEventListener("click", signOut);
+        tombolSubscribe.addEventListener("click", subscribeToNotifications);
+        tombolUnsubscribe.addEventListener("click", unsubscribeFromNotifications);
+        sendNotificationForm.addEventListener("submit", sendNotification);
+
+        // Functions //
+
+        function signIn() {
+            firebase_auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        }
+
+        function signOut() {
+            firebase_auth.signOut();
+            alert("berhasil logout");
+        }
+
+        function handleAuthStateChanged(user) {
+            if (user) {
+                // User login
+                alert(user.email + " login");
+                tombolLogin.setAttribute("hidden", "true");
+                tombolLogout.removeAttribute("hidden");
+                sendNotificationForm.removeAttribute("hidden");
+                checkSubscription();
+            } else {
+                // User logout
+                tombolLogout.setAttribute("hidden", "true");
+                tombolLogin.removeAttribute("hidden");
+                tombolSubscribe.setAttribute("hidden", "true");
+                tombolUnsubscribe.setAttribute("hidden", "true");
+                sendNotificationForm.setAttribute("hidden", "true");
+            }
+        }
+
+        function subscribeToNotifications() {
+            firebase_messaging.requestPermission()
+                .then(() => handleTokenRefresh())
+                .then(() => checkSubscription())
+                .then(() => alert("berhasil subscribe"))
+                .catch(() => {
+                    console.log("Get permission ERROR");
+                });
+        }
+
+        function handleTokenRefresh() {
+            return firebase_messaging.getToken().then((token) => {
+                firebase_database.ref('/tokens').push({
+                    token: token,
+                    uid: firebase_auth.currentUser.uid
+                });
+            });
+        }
+
+        function unsubscribeFromNotifications() {
+            firebase_messaging.getToken()
+                .then((token) => firebase_messaging.deleteToken(token))
+                .then(() => firebase_database.ref('/tokens').orderByChild("uid").equalTo(firebase_auth.currentUser.uid)
+                    .once('value'))
+                .then((snapshot) => {
+                    const key = Object.keys(snapshot.val())[0];
+                    return firebase_database.ref('/tokens').child(key).remove();
+                })
+                .then(() => alert("berhasil unsubscribe"))
+                .then(() => checkSubscription())
+                .catch(() => {
+                    console.log("Get unsubscribe ERROR");
+                });
+        }
+
+        function checkSubscription() {
+            firebase_database.ref('/tokens').orderByChild("uid").equalTo(firebase_auth.currentUser.uid).once('value')
+                .then((snapshot) => {
+                    if (snapshot.val()) {
+                        tombolSubscribe.setAttribute("hidden", "true");
+                        tombolUnsubscribe.removeAttribute("hidden");
+                    } else {
+                        tombolUnsubscribe.setAttribute("hidden", "true");
+                        tombolSubscribe.removeAttribute("hidden");
+                    }
+                });
+        }
+
+        function sendNotification(e) {
+            e.preventDefault();
+
+            const notificationMessage = document.getElementById('notificationMessage').value;
+            if (!notificationMessage) return;
+            firebase_database.ref('/notifications').push({
+                    user: firebase_auth.currentUser.displayName,
+                    message: notificationMessage,
+                    userProfilImg: firebase_auth.currentUser.photoURL
+                })
+                .then(() => {
+                    document.getElementById('notificationMessage').value = "";
+                    window.alert("Pesan Telah Terkirim");
+                })
+                .catch(() => {
+                    console.log("Send notification ERROR");
+                });
+        }
+    </script>
+</body>
+
+</html>
