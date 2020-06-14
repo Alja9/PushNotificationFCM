@@ -32,4 +32,3 @@ In this prototype there are two pages:
 ## For an example, please visit the following site:
 - To receive messages or as a normal user: [User Page](https://pushnotifdicoba.web.app/)
 - To be able to send a message: [Admin Page](https://pushnotifdicoba.web.app/sendMessaging.html)
-#### <i>I hope that there is a fork for this repo, to get the development that I expect. Thank you very much.</i>
