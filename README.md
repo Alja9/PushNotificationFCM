@@ -28,3 +28,5 @@ In this prototype there are two pages:
 ```
 
 <i>Database Structure for Sending to Device Token is Saved : `/notifications/{notificationId}`</i>
+
+#### <i>I hope that there is a fork for this repo, to get the development that I expect. Thank you very much.</i>
