@@ -32,4 +32,7 @@ In this prototype there are two pages:
 ## For an example, please visit the following site:
 - To receive messages or as a normal user: [User Page](https://pushnotifdicoba.web.app/)
 - To be able to send a message: [Admin Page](https://pushnotifdicoba.web.app/sendMessaging.html)
+
+
+### Receive notification messages:
 ![Receive notification messages](Result.jpg)
