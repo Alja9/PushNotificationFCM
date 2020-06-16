@@ -19,12 +19,14 @@ In this prototype there are two pages:
 ```
 /notifications
   /<uniqueTokenCode>
+    icon: "https://images.vexels.com/.../...-send-message-icon-by-vexels.png"
+    image: "https://......"
     message: "BlaBla"
-    user: "BlaBla"
-    userProfilImg: "BlaBla"
+    title: "BlaBla"
+    user: "Bla Jhonson Bla"
  /tokens
   /<uniqueTokenCode>
-    token: "BlaBla"
+    token: "BHYAH8y8hadfhU9x...n++"
 ```
 
 <i>Database Structure for Sending to Device Token is Saved : `/notifications/{notificationId}`</i>
