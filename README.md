@@ -19,7 +19,7 @@ In this prototype there are two pages:
 ```
 /notifications
   /<uniqueTokenCode>
-    icon: "https://images.vexels.com/.../...-send-message-icon-by-vexels.png"
+    icon: "https://www.freepngimg.com/thumb/bell/36705-8-bell.png"
     image: "https://......"
     message: "BlaBla"
     title: "BlaBla"
